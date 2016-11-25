@@ -31,7 +31,7 @@ class LogisticRegression:
     def calculateLikelihoodGradient(self,row):
         temp = self.shufflelabels[row] - self.calculateRowProbability(row)
         ans = self.shufflefeatures[row,:] * temp
-        return ans.reshape(self.shufflefeatures.shape[1],1)
+        return ans.reshape(self.features.shape[1],1)
 
     def calculateLikelihood(self,regularization):
         prob = self.calculateProbability()

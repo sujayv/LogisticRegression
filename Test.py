@@ -30,7 +30,12 @@ y = numpy.array([0]*int(n1) + [1]*int(n2))
 
 fig = plt.figure()
 
-
+currrows = range(len(X))
+numpy.random.shuffle(currrows)
+numpy.random.shuffle(currrows)
+numpy.random.shuffle(currrows)
+X = X[currrows,:]
+y = y[currrows]
 plt.scatter(X1[:,0],X1[:,1], marker='+')
 plt.scatter(X2[:,0],X2[:,1], c= 'green', marker='o')
 #plt.show()
