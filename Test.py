@@ -34,9 +34,11 @@ fig = plt.figure()
 plt.scatter(X1[:,0],X1[:,1], marker='+')
 plt.scatter(X2[:,0],X2[:,1], c= 'green', marker='o')
 #plt.show()
-
-momentumtype = raw_input("Enter the type of momentum:\n1. No momentum\n2. Classical Momentum (Polyak's Method)\n3. Nesterov's Accelerated Gradient")
-logistic = LR(X,y,1e-7)
-logistic.calculateStochasticGradientDescent(2e-5,10e6,int(momentumtype))
-
+choice = 1
+while(int(choice) == 1):
+    momentumtype = raw_input("Enter the type of momentum:\n1. No momentum\n2. Classical Momentum (Polyak's Method)\n3. Nesterov's Accelerated Gradient")
+    regularization = raw_input("Do you want regularization(Yes - 1, No - 2)")
+    logistic = LR(X,y,1e-7)
+    logistic.calculateStochasticGradientDescent(2e-5,10e6,int(momentumtype),int(regularization))
+    choice = raw_input("Do you want to run again(Yes - 1, No - 2)")
 plt.show()
