@@ -19,7 +19,7 @@ class HingeLoss:
         self.testlabels = self.labels[ratio:]
         self.shufflefeatures = self.trainfeatures
         self.shufflelabels = self.trainlabels
-        self.lambdaa = 10
+        self.lambdaa = 150
         print "size of training data is " + str(self.trainfeatures.shape[0])
         print "size of test data is " + str(self.testfeatures.shape[0])
 
@@ -30,7 +30,7 @@ class HingeLoss:
                 loss += max(0,1-v)
                 grad += 0 if v > 1 else -y_*x_
             if regularization == 1:
-                return (loss + self.lambdaa * numpy.square(self.weights).sum(axis=0),grad)
+                return (loss  + self.lambdaa * numpy.square(self.weights).sum(axis=0),grad)
             else:
                 return (loss,grad)
 
@@ -59,27 +59,27 @@ class HingeLoss:
         oldweights = self.weights
         oldvelocity = velocity
         mu = 0.60
-        file = open("HINGEwithL2.csv", "w")
+        file = open("HINGE.csv", "w")
         while diff > self.tolerance and i < iterations:
-            file.write((str)(oldloss)+"\n")
+            file.write((str)(alpha)+"\n")
             if i%500 == 0:
                 print "Iteration " + str(i)
             for j in range(len(self.trainfeatures)):
                 if method == 1:
                     if regularization == 1:
-                        self.weights = self.weights - alpha * self.hinge_loss_Stochastic(j) - alpha * self.lambdaa * self.weights
+                        self.weights = self.weights - alpha * self.hinge_loss_Stochastic(j) - alpha *  self.lambdaa * self.weights
                     else:
                         self.weights = self.weights - alpha * self.hinge_loss_Stochastic(j)
                 elif method == 2:
                     velocity = mu * velocity - alpha * self.hinge_loss_Stochastic(j)
                     if regularization == 1:
-                        self.weights = self.weights - alpha * self.hinge_loss_Stochastic(j) - alpha * self.lambdaa * self.weights
+                        self.weights = self.weights + velocity - alpha *  self.lambdaa * self.weights
                     else:
                         self.weights = self.weights + velocity
                 elif method == 3:
                     velocity = mu * velocity - alpha * self.hinge_loss_Stochastic(j)
                     if regularization == 1:
-                        self.weights = self.weights - alpha * self.hinge_loss_Stochastic(j) - alpha * self.lambdaa * self.weights
+                        self.weights = self.weights - mu * oldvelocity + (1 + mu) * velocity - alpha * self.lambdaa * self.weights
                     else:
                         self.weights = self.weights - mu * oldvelocity + (1 + mu) * velocity
             newloss = self.hinge_loss(regularization)[0]
@@ -89,7 +89,7 @@ class HingeLoss:
                 alpha = 0.5 * alpha
                 self.weights = oldweights
             else:
-                alpha = 0.80 * alpha
+                alpha = 1.05 * alpha
             oldweights = self.weights
             oldvelocity = velocity
             oldloss = newloss
@@ -101,19 +101,20 @@ class HingeLoss:
             #print alpha
         print self.weights
         print self.hinge_loss(regularization)[0]
-        print "Converged in " + str(i) + "iterations"
-        a = raw_input("press enter")
+        print "Converged in " + str(i) + " iterations"
+        file.close()
+        #a = raw_input("press enter")
         classified = 0
         count = 0
         for i in range(0,self.testfeatures.shape[0]):
-            prob = 1 + numpy.exp(-self.testfeatures[i].dot(self.weights))
+            prob = numpy.sign(numpy.dot(self.weights,self.testfeatures[i]))
             #print "probability is " + str(1 / prob)
             #print "the class should be " + str(self.testlabels[i][0])
             label = 0.0
-            if(1/prob) > 0.5:
+            if(prob) == 1:
                 label = 1.0
                 count = count + 1
-            elif (1/prob) < 0.5:
+            elif (prob) == -1:
                 label = -1.0
                 count = count + 1
             else:
@@ -124,19 +125,19 @@ class HingeLoss:
                 pass
             else:
                 classified = classified + 1
-        print 'Correctly classified test data is  ' + str(classified*100/count) + '%'
+        print 'Correctly classified test data is  ' + str(classified*100.0/count) + '%'
 
         classified = 0
         count = 0
         for i in range(0, self.trainfeatures.shape[0]):
-            prob = 1 + numpy.exp(-self.trainfeatures[i].dot(self.weights))
+            prob = numpy.sign(numpy.dot(self.weights,self.trainfeatures[i]))
             #print "probability is " + str(1 / prob)
             #print "the class should be " + str(self.trainlabels[i][0])
             label = 0.0
-            if (1 / prob) > 0.5:
+            if (prob) == 1:
                 label = 1.0
                 count = count + 1
-            elif (1 / prob) < 0.5:
+            elif (prob) == -1:
                 label = -1.0
                 count = count + 1
             else:
@@ -147,7 +148,7 @@ class HingeLoss:
                 pass
             else:
                 classified = classified + 1
-        print 'Correctly classified training data is  ' + str(classified * 100 / count) + '%'
+        print 'Correctly classified training data is  ' + str(classified * 100.0 / count) + '%'
 
 
 

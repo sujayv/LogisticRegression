@@ -16,9 +16,9 @@ class LogisticRegression:
         self.testlabels = self.labels[ratio:]
         self.shufflefeatures = self.trainfeatures
         self.shufflelabels = self.trainlabels
-        self.lambdaa = 10
-        print "size of training data is " + str(self.trainfeatures.shape[0])
-        print "size of test data is " + str(self.testfeatures.shape[0])
+        self.lambdaa = 150
+        #print "size of training data is " + str(self.trainfeatures.shape[0])
+        #print "size of test data is " + str(self.testfeatures.shape[0])
 
     def calculateRowProbability(self,row):
         prob = 1 + numpy.exp(-(self.shufflefeatures[row,:].dot(self.weights)))
@@ -53,9 +53,9 @@ class LogisticRegression:
         oldweights = self.weights
         oldvelocity = velocity
         mu = 0.60
-        file = open("LOGwithL2.csv","w")
+        file = open("LOG.csv","w")
         while diff > self.tolerance and i < iterations:
-            file.write((str)(oldlikelihood)+"\n")
+            file.write((str)(alpha)+"\n")
             if i%500 == 0:
                 print "Iteration " + str(i)
                 print oldlikelihood
@@ -83,7 +83,7 @@ class LogisticRegression:
                 alpha = 0.50 * alpha
                 self.weights = oldweights
             else:
-                alpha = 0.80 * alpha
+                alpha = 1.05 * alpha
             oldweights = self.weights
             oldvelocity = velocity
             oldlikelihood = newlikelihood
@@ -93,8 +93,9 @@ class LogisticRegression:
             self.shufflelabels = self.shufflelabels[currentrows]
         print self.weights.T
         print self.calculateLikelihood(regularization)
-        print "Converged in "+ str(i) + "iterations"
-        a = raw_input("press enter")
+        print "Converged in "+ str(i) + " iterations"
+        file.close()
+        #a = raw_input("press enter")
         classified = 0
         count = 0
         for i in range(0,self.testfeatures.shape[0]):
@@ -114,7 +115,7 @@ class LogisticRegression:
                 pass
             else:
                 classified = classified + 1
-        print 'Correctly classified test data is  ' + str(classified*100/count) + '%'
+        print 'Correctly classified test data is  ' + str(classified*100.0/count) + '%'
 
         classified = 0
         count = 0
@@ -134,7 +135,7 @@ class LogisticRegression:
                 pass
             else:
                 classified = classified + 1
-        print 'Correctly classified training data is  ' + str(classified * 100 / count) + '%'
+        print 'Correctly classified training data is  ' + str(classified * 100.0 / count) + '%'
 
 
 
