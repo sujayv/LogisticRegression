@@ -21,3 +21,5 @@ The learning rate for the classifiers are set to 0.01 as default. You can edit t
 We have divided the data set in the ratio of 80:20 where 80% is the training data and 20% is the testing data.
 
 You can browse through the code and read the comments to see how we implemented each loss function.
+
+The Github link for the code is :https://github.com/sujayv/LogisticRegression

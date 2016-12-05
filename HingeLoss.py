@@ -17,7 +17,7 @@ class HingeLoss:
         self.testlabels = self.labels[ratio:]
         self.shufflefeatures = self.trainfeatures
         self.shufflelabels = self.trainlabels
-        self.lambdaa = 10
+        self.lambdaa = 150
 
 #Method to calculate the hinge loss value for the entire data set
     def hinge_loss(self,regularization):
