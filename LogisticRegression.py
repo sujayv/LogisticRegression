@@ -63,12 +63,12 @@ class LogisticRegression:
         oldweights = self.weights
         oldvelocity = velocity
         mu = 0.60																	#Parameter while calculating momentum
-        file = open("LOG.csv","w")
+        #file = open("LOG.csv","w")
         while diff > self.tolerance and i < iterations:								#The loop to go through multiple epochs until tolerance is reached
-            file.write((str)(alpha)+"\n")											#Output data to a .csv file
+            #file.write((str)(alpha)+"\n")											#Output data to a .csv file
             if i%500 == 0:
                 print "Epoch " + str(i)
-                print oldlikelihood
+                #print oldlikelihood
             for j in range(len(self.trainfeatures)):
 
             	#Method 1 is for training weights without momentum
@@ -114,7 +114,7 @@ class LogisticRegression:
         print "The final weights are "+ str(self.weights.T)
         print "The final likelihood value is "+ str(self.calculateLikelihood(regularization))
         print "Converged in "+ str(i) + " iterations"
-        file.close()
+        #file.close()
         #a = raw_input("press enter")
         classified = 0
         count = 0

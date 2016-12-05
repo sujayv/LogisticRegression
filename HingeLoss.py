@@ -17,7 +17,7 @@ class HingeLoss:
         self.testlabels = self.labels[ratio:]
         self.shufflefeatures = self.trainfeatures
         self.shufflelabels = self.trainlabels
-        self.lambdaa = 150
+        self.lambdaa = 10
 
 #Method to calculate the hinge loss value for the entire data set
     def hinge_loss(self,regularization):
@@ -49,11 +49,11 @@ class HingeLoss:
         self.shufflefeatures = self.shufflefeatures[currentrows,:]
         self.shufflelabels = self.shufflelabels[currentrows]
         oldweights = self.weights
-        oldvelocity = velocityk
+        oldvelocity = velocity
         mu = 0.60                                                   #Parameter while calculating momentum
-        file = open("HINGE.csv", "w")
+        #file = open("HINGE.csv", "w")
         while diff > self.tolerance and i < iterations:
-            file.write((str)(alpha)+"\n")
+            #file.write((str)(alpha)+"\n")
             if i%500 == 0:
                 print "Iteration " + str(i)
             for j in range(len(self.trainfeatures)):
@@ -99,7 +99,7 @@ class HingeLoss:
         print "The final weights are "+ str(self.weights.T)
         print "The final loss value is "+str(self.hinge_loss(regularization))
         print "Converged in " + str(i) + " iterations"
-        file.close()
+        #file.close()
         classified = 0
         count = 0
         for i in range(0,self.testfeatures.shape[0]):
